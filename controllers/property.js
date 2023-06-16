@@ -101,7 +101,6 @@ exports.updateRent = async (req, res, next) => {
   }
   try {
     const check = await forRent.findById(postId);
-    console.log(check)
     if (check.user.toString() !== req.userId) {
       const error = new Error("Current Login user Can't update the Post");
       error.statusCode = 403;

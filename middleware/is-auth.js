@@ -16,7 +16,7 @@ module.exports = async (req, res, next) => {
     req.userId = verifytoken.userId;
     req.contact = verifytoken.phone;
     next();
-  } catch (err) {
-    return res.status(400).json({ code: 400, message: err.message });
+  } catch (error) {
+    return res.status(400).json({ code: 400, message: error.message });
   }
 };
