@@ -86,6 +86,10 @@ const forSaleHouseApartmt = new Schema({
     type: String,
     default: "Sector 33",
   },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "user",
+  },
   day: {
     type: Date,
     default: Date.now(),

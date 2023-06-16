@@ -14,6 +14,7 @@ exports.signup = async (req, res, next) => {
   try {
     newOtp = generateOtp();
     await messageOtp(phone, newOtp);
+    
     const postUser = await user.save();
 
     const token = jwt.sign(

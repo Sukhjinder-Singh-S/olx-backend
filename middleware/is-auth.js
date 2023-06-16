@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const SECRET_KEY = "thisIsASecretKey";
 
 module.exports = async (req, res, next) => {
-  //   console.log(req)
+    console.log("Controle in authentication middleware")
   try {
     if (!req.headers.authorization) {
       return res.status(200).json({ code: 200, message: "Unauthorized ..." });

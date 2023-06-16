@@ -27,7 +27,13 @@ const userSchema = new Schema({
     type: String,
     // required: true,
   },
-  items:[{type:Schema.Types.ObjectId, ref:" "}]
+  items: [
+    { type: Schema.Types.ObjectId, ref: "forRentHsA" },
+    { type: Schema.Types.ObjectId, ref: "cars" },
+    { type: Schema.Types.ObjectId, ref: "forRentSsO" },
+    { type: Schema.Types.ObjectId, ref: "forSaleHsA" },
+    { type: Schema.Types.ObjectId, ref: "landsAndPlots" },
+  ],
 });
 
 module.exports = mongoose.model("users", userSchema);

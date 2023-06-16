@@ -1,4 +1,3 @@
-
 const accountSid = "AC9500316d1dd9b63436622d2ee812e8c0";
 const authToken = "47407e30d572edcbb9e2699a36f6b43d";
 

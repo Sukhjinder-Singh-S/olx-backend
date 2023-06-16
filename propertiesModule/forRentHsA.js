@@ -127,6 +127,10 @@ const forRentHsA = new Schema({
   day:{
     type:Date,
     default: Date.now()
+  },
+  user:{
+    type:Schema.Types.ObjectId,
+    ref:"user"
   }
 });
 

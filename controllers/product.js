@@ -51,6 +51,7 @@ exports.getProductsCar = async (req, res) => {
           state: 1,
           city: 1,
           neighbour: 1,
+          user:1,
         },
       },
     ]);
@@ -80,6 +81,7 @@ exports.getProductsCar = async (req, res) => {
           state: 1,
           city: 1,
           neighbourhood: 1,
+          user:1,
         },
       },
     ]);
@@ -102,6 +104,7 @@ exports.getProductsCar = async (req, res) => {
           state: 1,
           city: 1,
           neighbourhood: 1,
+          user:1,
         },
       },
     ]);
@@ -125,6 +128,7 @@ exports.getProductsCar = async (req, res) => {
           state: 1,
           city: 1,
           neighbourhood: 1,
+          user:1,
         },
       },
     ]);
