@@ -16,7 +16,7 @@ exports.generateOtp = ()=> {
     const client = require("twilio")(accountSid, authToken);
     client.messages
       .create({
-        body: `You're otp ${otp}`,
+        body: `Dear Customer, use code ${otp} to login to your OLX account. Never share your code with anyone.`,
         from: "+12543313673",
         to: phone,
       })

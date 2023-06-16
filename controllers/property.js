@@ -101,6 +101,7 @@ exports.updateRent = async (req, res, next) => {
   }
   try {
     const check = await forRent.findById(postId);
+    console.log(check)
     if (check.user.toString() !== req.userId) {
       const error = new Error("Current Login user Can't update the Post");
       error.statusCode = 403;
@@ -154,11 +155,10 @@ exports.deleteRent = async (req, res, next) => {
       const extract = obj.path.replace("\\", "/");
       clearImage(extract);
     });
-  
-    
+
     await forRent.findByIdAndDelete(postId);
     const user = await User.findById(req.userId);
-    user.items.pull(postId)
+    user.items.pull(postId);
     user.save();
 
     res.status(200).json({ message: "Post deleted successfully" });
