@@ -12,6 +12,7 @@ const Upload = require("./middleware/multer");
 const Handler = require("./middleware/error-handler");
 const auth = require("./routes/auth");
 const mobileRoutes = require("./routes/mobile");
+const fashionRouter = require("./routes/fashion");
 
 app.use("/images", express.static(path.join(__dirname, "uploades")));
 app.use(bodyParser.json());
@@ -22,6 +23,7 @@ app.use("/car", productRoute);
 app.use("/property", Property);
 app.use("/auth", auth);
 app.use("/mobile", mobileRoutes);
+app.use("/fashion", fashionRouter);
 app.use(Handler.errorHandler);
 
 const MONGODB_URI =

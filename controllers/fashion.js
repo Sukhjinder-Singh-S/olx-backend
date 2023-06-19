@@ -1,19 +1,19 @@
-const path = require("path");
 const fs = require("fs");
+const path = require("path");
 
-const Mobile = require("../mobile/mobile-phones");
-const Accessories = require("../mobile/accessories");
-const Tablets = require("../mobile/tablets");
+const Mens = require("../fashionModel/mens");
+const Women = require("../fashionModel/women");
+const kid = require("../fashionModel/kids");
 const User = require("../modules/user");
 
 const clearImage = (filePath) => {
   filePath = path.join(__dirname, "..", filePath);
   fs.unlink(filePath, (error) => console.log(error));
 };
-//  MOBILE CONTROLLER
-exports.postMobile = async (req, res, next) => {
-  const postMobile = new Mobile({
-    brand: req.body.brand,
+
+//Mens Fashion
+exports.postMens = async (req, res, next) => {
+  const postMen = new Mens({
     adTitle: req.body.adTitle,
     description: req.body.description,
     price: req.body.price,
@@ -24,14 +24,14 @@ exports.postMobile = async (req, res, next) => {
     user: req.userId,
   });
   try {
-    const mobilePost = await postMobile.save();
-    const user = await User.findById(req.userId);
-    await user.items.push(postMobile);
-    await user.save();
-    console.log(user, mobilePost);
-    res
-      .status(201)
-      .json({ message: "Mobile Post Saved Successfully", User: user });
+    const post = await postMen.save();
+    const findUser = await User.findById(req.userId);
+    await findUser.items.push(postMen);
+    await findUser.save();
+    res.status(201).json({
+      message: `Post save successfully for user ${req.userId}`,
+      Post: post,
+    });
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;
@@ -40,15 +40,14 @@ exports.postMobile = async (req, res, next) => {
   }
 };
 
-exports.updateMobile = async (req, res, next) => {
+exports.updateMens = async (req, res, next) => {
   const postId = req.params._id;
   if (!postId) {
-    const error = new Error("No Post Id Found");
+    const error = new Error("No Post Id found");
     error.statusCode = 404;
     throw error;
   }
   const payload = {
-    brand: req.body.brand,
     adTitle: req.body.adTitle,
     description: req.body.description,
     price: req.body.price,
@@ -61,33 +60,33 @@ exports.updateMobile = async (req, res, next) => {
     images = req.files;
   }
   if (!images) {
-    const error = new Error("No image Found");
+    const error = new Error("No file selected");
     error.statusCode = 404;
     throw error;
   }
   try {
-    const check = await Mobile.findById(postId);
-    if (check.user.toString() !== req.userId) {
+    const findPost = await Mens.findById(postId);
+    console.log(findPost.user.toString());
+    if (findPost.user.toString() !== req.userId) {
       const error = new Error("You're not allow to modify this post");
       error.statusCode = 304;
       throw error;
     }
-    const postUpdate = await Mobile.findByIdAndUpdate(postId, payload);
-    if (!postUpdate) {
-      const error = new Error("No Post found");
+    const updatePost = await Mens.findByIdAndUpdate(postId, payload);
+    if (!updatePost) {
+      const error = new Error("Sorry, No Post found with this id");
       error.statusCode = 204;
       throw error;
     }
-
-    if (images !== postUpdate.images) {
-      postUpdate.images.forEach((obj) => {
+    if (images !== updatePost.images) {
+      updatePost.images.forEach((obj) => {
         const extract = obj.path.replace("\\", "/");
         clearImage(extract);
       });
     }
     res
       .status(201)
-      .json({ message: "Post updated successfully", user: req.userId });
+      .json({ message: `you're post updated successfully`, Post: updatePost });
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;
@@ -96,149 +95,22 @@ exports.updateMobile = async (req, res, next) => {
   }
 };
 
-exports.deleteMobilePost = async (req, res, next) => {
+exports.deleteMens = async (req, res, next) => {
   const postId = req.params._id;
   if (!postId) {
-    const error = new Error("No Id Found");
+    const error = new Error("No Post Id found");
     error.statusCode = 404;
     throw error;
   }
   try {
-    const findPost = await Mobile.findById(postId);
-    if (!findPost) {
-      const error = new Error("No Post found");
-      error.statusCode = 404;
-      throw error;
-    }
-    if (findPost.user.toString() !== req.userId) {
-      const error = new Error("You're not allow to delet this post");
-      error.statusCode = 203;
-      throw error;
-    }
-    findPost.images.forEach((obj) => {
-      const extract = obj.path.replace("\\", "/");
-      clearImage(extract);
-    });
-    await Mobile.findByIdAndDelete(postId);
-    const user = await User.findById(req.userId);
-    await user.items.pull(postId);
-    await user.save();
-    res
-      .status(201)
-      .json({ message: `Post Delete successfully for User ${req.userId}` });
-  } catch (error) {
-    if (!error.statusCode) {
-      error.statusCode = 500;
-    }
-    next(error);
-  }
-};
-
-// ACCESSORIES CONTROLLER
-exports.postAccessories = async (req, res, next) => {
-  const postAd = new Accessories({
-    type: req.body.type,
-    adTitle: req.body.adTitle,
-    description: req.body.description,
-    price: req.body.price,
-    images: req.files,
-    state: req.body.state,
-    city: req.body.city,
-    neighbourhood: req.body.neighbourhood,
-    user: req.userId,
-  });
-  try {
-    const savePost = await postAd.save();
-    const user = await User.findById(req.userId);
-    await user.items.push(postAd);
-    await user.save();
-
-    res
-      .status(201)
-      .json({ message: `Post saved successfull for user ${req.userId}` });
-  } catch (error) {
-    if (!error.statusCode) {
-      error.statusCode = 500;
-    }
-    next(error);
-  }
-};
-
-exports.updateAccessories = async (req, res, next) => {
-  const postId = req.params._id;
-  if (!postId) {
-    const error = new Error("Please Provide a Post Id");
-    error.statusCode = 404;
-    throw error;
-  }
-  const payload = {
-    type: req.body.type,
-    adTitle: req.body.adTitle,
-    description: req.body.description,
-    price: req.body.price,
-    images: req.files,
-    state: req.body.state,
-    city: req.body.city,
-    neighbourhood: req.body.neighbourhood,
-  };
-
-  if (req.files) {
-    images = req.files;
-  }
-  if (!images) {
-    const error = new Error("No files provided");
-    error.statusCode = 404;
-    throw error;
-  }
-
-  try {
-    const check = await Accessories.findById(postId);
-    if (check.user.toString() !== req.userId) {
-      const error = new Error("You're not allow to modify this Post");
-      error.statusCode = 304;
-      throw error;
-    }
-    const findPost = await Accessories.findByIdAndUpdate(postId, payload);
+    const findPost = await Mens.findById(postId);
     if (!findPost) {
       const error = new Error("No Post Found");
       error.statusCode = 404;
       throw error;
     }
-    if (images !== findPost.images) {
-      findPost.images.forEach((obj) => {
-        const extract = obj.path.replace("\\", "/");
-        clearImage(extract);
-      });
-    }
-
-    res
-      .status(201)
-      .json({ message: `Post updated successfully for user ${req.userId}` });
-  } catch (error) {
-    if (!error.statusCode) {
-      error.statusCode = 500;
-    }
-    next(error);
-  }
-};
-
-exports.deleteAccessories = async (req, res, next) => {
-  const postId = req.params._id;
-  if (!postId) {
-    const error = new Error("Please Provide Id");
-    error.statusCode = 404;
-    throw error;
-  }
-
-  try {
-    const findPost = await Accessories.findById(postId);
-    if (!findPost) {
-      const error = new Error("No post found");
-      error.statusCode = 404;
-      throw error;
-    }
     if (findPost.user.toString() !== req.userId) {
-      const error = new Error("You're not allow to delete this post");
+      const error = new Error("you're not allow to modify this post");
       error.statusCode = 203;
       throw error;
     }
@@ -246,15 +118,13 @@ exports.deleteAccessories = async (req, res, next) => {
       const extract = obj.path.replace("\\", "/");
       clearImage(extract);
     });
-    const deletePost = await Accessories.findByIdAndRemove(postId);
+    await Mens.findByIdAndRemove(postId);
     const user = await User.findById(req.userId);
     await user.items.pull(postId);
     await user.save();
-    res.status(201).json({
-      message: `${deletePost}        
-        deleted successfully for user
-         ${req.userId} `,
-    });
+    res
+      .status(201)
+      .json({ message: `Post deleted successfully for user ${req.userId}` });
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;
@@ -263,11 +133,10 @@ exports.deleteAccessories = async (req, res, next) => {
   }
 };
 
-// TABLETS CONTROLLER
+//WOMENS CONTROLLER
 
-exports.postTablet = async (req, res, next) => {
-  const post = new Tablets({
-    types: req.body.types,
+exports.postWomen = async (req, res, next) => {
+  const postWomen = new Women({
     adTitle: req.body.adTitle,
     description: req.body.description,
     price: req.body.price,
@@ -277,11 +146,17 @@ exports.postTablet = async (req, res, next) => {
     neighbourhood: req.body.neighbourhood,
     user: req.userId,
   });
+  if (!req.files) {
+    const error = new Error("No file selected");
+    error.statusCode = 404;
+    throw error;
+  }
   try {
-    const savePost = await post.save();
+    const savePost = await postWomen.save();
     const user = await User.findById(req.userId);
-    await user.items.push(post);
+    await user.items.push(postWomen);
     await user.save();
+
     res.status(201).json({
       message: `Post saved successfully for user ${req.userId}`,
       Post: savePost,
@@ -294,15 +169,14 @@ exports.postTablet = async (req, res, next) => {
   }
 };
 
-exports.updateTablet = async (req, res, next) => {
+exports.updateWomen = async (req, res, next) => {
   const postId = req.params._id;
   if (!postId) {
-    const error = new Error("Please provide a Id");
+    const error = new Error("No Post Id found");
     error.statusCode = 404;
     throw error;
   }
   const payload = {
-    types: req.body.types,
     adTitle: req.body.adTitle,
     description: req.body.description,
     price: req.body.price,
@@ -315,32 +189,32 @@ exports.updateTablet = async (req, res, next) => {
     images = req.files;
   }
   if (!images) {
-    const error = new Error("Please Provide Images");
+    const error = new Error("No file selected");
     error.statusCode = 404;
     throw error;
   }
   try {
-    const check = await Tablets.findById(postId);
+    const check = await Women.findById(postId);
     if (check.user.toString() !== req.userId) {
-      const error = new Error("You're not allow to modify this post");
+      const error = new Error("You're not allow to modify this Post");
       error.statusCode = 304;
       throw error;
     }
-    const updatePost = await Tablets.findByIdAndUpdate(postId, payload);
-    if (!updatePost) {
-      const error = new Error("No Post found with this id");
+    const updateWomen = await Women.findByIdAndUpdate(postId, payload);
+    if (!updateWomen) {
+      const error = new Error("No Post Found");
       error.statusCode = 204;
       throw error;
     }
-    if (images !== updatePost.images) {
-      updatePost.images.forEach((obj) => {
+    if (images !== updateWomen.images) {
+      updateWomen.images.forEach((obj) => {
         const extract = obj.path.replace("\\", "/");
         clearImage(extract);
       });
     }
     res.status(201).json({
       message: `Post updated successfully for user ${req.userId}`,
-      Post: updatePost,
+      Post: updateWomen,
     });
   } catch (error) {
     if (!error.statusCode) {
@@ -350,32 +224,157 @@ exports.updateTablet = async (req, res, next) => {
   }
 };
 
-exports.deleteTablet = async (req, res, next) => {
+exports.deleteWomen = async (req, res, next) => {
   const postId = req.params._id;
   if (!postId) {
-    const error = new Error("No Id found");
+    const error = new Error("No Post Id found");
     error.statusCode = 404;
     throw error;
   }
   try {
-    const findPost = await Tablets.findById(postId);
-    if (!findPost) {
-      const error = new Error("No Post Found");
-      error.statusCode = 404;
-    }
+    const findPost = await Women.findById(postId);
     if (findPost.user.toString() !== req.userId) {
       const error = new Error("You're not allow to delete this post");
       error.statusCode = 203;
       throw error;
     }
-    findPost.images.forEach((image) => {
-      const extract = image.path.replace("\\", "/");
+    findPost.images.forEach((obj) => {
+      const extract = obj.path.replace("\\", "/");
       clearImage(extract);
     });
-    const deletePost = await Tablets.findByIdAndRemove(postId);
-    const findUser = await User.findById(req.userId);
-    await findUser.items.pull(postId);
-    await findUser.save();
+    const deletePost = await Women.findByIdAndRemove(postId);
+    if (!deletePost) {
+      const error = new Error("No Post Found with this id");
+      error.statusCode = 404;
+      throw error;
+    }
+    const user = await User.findById(req.userId);
+    await user.items.pull(postId);
+    await user.save();
+    res
+      .status(201)
+      .json({ message: `Post deleted successfully for user ${req.userId}` });
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+};
+
+//KIDS CONTROLLER
+
+exports.postKid = async (req, res, next) => {
+  const postKid = new kid({
+    adTitle: req.body.adTitle,
+    description: req.body.description,
+    price: req.body.price,
+    images: req.files,
+    state: req.body.state,
+    city: req.body.city,
+    neighbourhood: req.body.neighbourhood,
+    user: req.userId,
+  });
+  if (!req.files) {
+    const error = new Error("No file selected");
+    error.statusCoden = 404;
+    throw error;
+  }
+  try {
+    const createPost = await postKid.save();
+    const user = await User.findById(req.userId);
+    await user.items.push(postKid);
+    await user.save();
+    res.status(201).json({
+      message: `Post saved successfully for user ${req.userId}`,
+      Post: createPost,
+    });
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+};
+
+exports.updateKid = async (req, res, next) => {
+  const postId = req.params._id;
+  if (!postId) {
+    const error = new Error("No id found");
+    error.statusCode = 404;
+    throw error;
+  }
+  const payload = {
+    adTitle: req.body.adTitle,
+    description: req.body.description,
+    price: req.body.price,
+    images: req.files,
+    state: req.body.state,
+    city: req.body.city,
+    neighbourhood: req.body.neighbourhood,
+  };
+  if (req.files) {
+    images = req.files;
+  }
+  if (!images) {
+    const error = new Error("No file selected");
+    error.statusCode = 404;
+    throw error;
+  }
+  try {
+    const check = await kid.findById(postId);
+    if (check.user.toString() !== req.userId) {
+      const error = new Error("You're not allow to modify this post");
+      error.statusCode = 304;
+      throw error;
+    }
+
+    const updatePost = await kid.findByIdAndUpdate(postId, payload);
+    if (!updatePost) {
+      const error = new Error("No Post Found with this id");
+      error.statusCode = 204;
+      throw error;
+    }
+    if (images !== updatePost.images) {
+      updatePost.images.forEach((obj) => {
+        const extract = obj.path.replace("\\", "/");
+        clearImage(extract);
+      });
+    }
+    res
+      .status(201)
+      .json({ message: `Post updated successfully for user ${req.userId}` });
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+};
+
+exports.deleteKid = async (req, res, next) => {
+  const postId = req.params._id;
+  if (!postId) {
+    const error = new Error("No id found");
+    error.statusCode = 404;
+    throw error;
+  }
+  try {
+    const findPost = await kid.findById(postId);
+    if (findPost.user.toString() !== req.userId) {
+      const error = new Error("you're not allow to delete this post")
+      error.statusCode = 203;
+      throw error;
+    }
+
+    findPost.images.forEach((obj) => {
+      const extract = obj.path.replace("\\", "/");
+      clearImage(extract);
+    });
+    const deletePost = await kid.findByIdAndDelete(postId);
+    const user = await User.findById(req.userId);
+    await user.items.pull(postId);
+    await user.save();
     res
       .status(201)
       .json({ message: `Post deleted successfully for user ${req.userId}` });
