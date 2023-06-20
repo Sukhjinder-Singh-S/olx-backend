@@ -39,9 +39,9 @@ exports.postRent = async (req, res, next) => {
   });
   try {
     const postRent = await rent.save();
-    const user = await User.findById(req.userId);
-    await user.items.push(rent);
-    await user.save();
+    // const user = await User.findById(req.userId);
+    // await user.items.push(rent);
+    // await user.save();
     // user.items.push(rent);
     console.log(user);
     res.status(201).json({
@@ -156,9 +156,9 @@ exports.deleteRent = async (req, res, next) => {
     });
 
     await forRent.findByIdAndDelete(postId);
-    const user = await User.findById(req.userId);
-    user.items.pull(postId);
-    user.save();
+    // const user = await User.findById(req.userId);
+    // user.items.pull(postId);
+    // user.save();
 
     res.status(200).json({ message: "Post deleted successfully" });
   } catch (error) {
@@ -201,9 +201,9 @@ exports.postSale = async (req, res) => {
   });
   try {
     const saved = await sale.save();
-    const user = await User.findById(req.userId);
-    await user.items.push(sale);
-    await user.save();
+    // const user = await User.findById(req.userId);
+    // await user.items.push(sale);
+    // await user.save();
     res.status(201).json({ message: "Post Saved successfully", post: saved });
   } catch (error) {
     if (!error.statusCode) {
@@ -343,9 +343,9 @@ exports.postPlots = async (req, res, next) => {
   });
   try {
     const onGo = await newPost.save();
-    const user = await User.findById(req.userId);
-    await user.items.push(newPost);
-    await user.save();
+    // const user = await User.findById(req.userId);
+    // await user.items.push(newPost);
+    // await user.save();
     res.status(200).json({ message: "Post Saved Successfully", Post: onGo });
   } catch (error) {
     if (!error.statusCode) {
@@ -475,9 +475,9 @@ exports.postAdd = async (req, res, next) => {
   });
   try {
     const post = await postProd.save();
-    const user = await User.findById(req.userId);
-    await user.items.push(postProd);
-    await user.save();
+    // const user = await User.findById(req.userId);
+    // await user.items.push(postProd);
+    // await user.save();
     res
       .status(200)
       .json({ message: "Post added successfully", post: post, user: user });

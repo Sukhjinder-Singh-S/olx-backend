@@ -25,10 +25,10 @@ exports.postMobile = async (req, res, next) => {
   });
   try {
     const mobilePost = await postMobile.save();
-    const user = await User.findById(req.userId);
-    await user.items.push(postMobile);
-    await user.save();
-    console.log(user, mobilePost);
+    // const user = await User.findById(req.userId);
+    // await user.items.push(postMobile);
+    // await user.save();
+    // console.log(user, mobilePost);
     res
       .status(201)
       .json({ message: "Mobile Post Saved Successfully", User: user });
@@ -120,9 +120,9 @@ exports.deleteMobilePost = async (req, res, next) => {
       clearImage(extract);
     });
     await Mobile.findByIdAndDelete(postId);
-    const user = await User.findById(req.userId);
-    await user.items.pull(postId);
-    await user.save();
+    // const user = await User.findById(req.userId);
+    // await user.items.pull(postId);
+    // await user.save();
     res
       .status(201)
       .json({ message: `Post Delete successfully for User ${req.userId}` });
@@ -149,9 +149,9 @@ exports.postAccessories = async (req, res, next) => {
   });
   try {
     const savePost = await postAd.save();
-    const user = await User.findById(req.userId);
-    await user.items.push(postAd);
-    await user.save();
+    // const user = await User.findById(req.userId);
+    // await user.items.push(postAd);
+    // await user.save();
 
     res
       .status(201)
@@ -247,9 +247,9 @@ exports.deleteAccessories = async (req, res, next) => {
       clearImage(extract);
     });
     const deletePost = await Accessories.findByIdAndRemove(postId);
-    const user = await User.findById(req.userId);
-    await user.items.pull(postId);
-    await user.save();
+    // const user = await User.findById(req.userId);
+    // await user.items.pull(postId);
+    // await user.save();
     res.status(201).json({
       message: `${deletePost}        
         deleted successfully for user
@@ -279,9 +279,9 @@ exports.postTablet = async (req, res, next) => {
   });
   try {
     const savePost = await post.save();
-    const user = await User.findById(req.userId);
-    await user.items.push(post);
-    await user.save();
+    // const user = await User.findById(req.userId);
+    // await user.items.push(post);
+    // await user.save();
     res.status(201).json({
       message: `Post saved successfully for user ${req.userId}`,
       Post: savePost,
@@ -373,9 +373,9 @@ exports.deleteTablet = async (req, res, next) => {
       clearImage(extract);
     });
     const deletePost = await Tablets.findByIdAndRemove(postId);
-    const findUser = await User.findById(req.userId);
-    await findUser.items.pull(postId);
-    await findUser.save();
+    // const findUser = await User.findById(req.userId);
+    // await findUser.items.pull(postId);
+    // await findUser.save();
     res
       .status(201)
       .json({ message: `Post deleted successfully for user ${req.userId}` });

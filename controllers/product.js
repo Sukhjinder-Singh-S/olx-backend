@@ -5,6 +5,9 @@ const SaleHsA = require("../propertiesModule/forSaleHsA");
 const Rent = require("../propertiesModule/forRentHsA");
 const Plots = require("../propertiesModule/landsAndPlots");
 const OfficeAndShop = require("../propertiesModule/forRentSsO");
+const Accessories = require("../mobile/accessories");
+const Mobile = require("../mobile/mobile-phones");
+const Tablets = require("../mobile/tablets");
 const User = require("../modules/user");
 const { generateOtp, messageOtp } = require("../middleware/mobile-verify");
 
@@ -51,7 +54,7 @@ exports.getProductsCar = async (req, res) => {
           state: 1,
           city: 1,
           neighbour: 1,
-          user:1,
+          user: 1,
         },
       },
     ]);
@@ -81,7 +84,7 @@ exports.getProductsCar = async (req, res) => {
           state: 1,
           city: 1,
           neighbourhood: 1,
-          user:1,
+          user: 1,
         },
       },
     ]);
@@ -104,7 +107,7 @@ exports.getProductsCar = async (req, res) => {
           state: 1,
           city: 1,
           neighbourhood: 1,
-          user:1,
+          user: 1,
         },
       },
     ]);
@@ -128,7 +131,48 @@ exports.getProductsCar = async (req, res) => {
           state: 1,
           city: 1,
           neighbourhood: 1,
-          user:1,
+          user: 1,
+        },
+      },
+    ]);
+
+    // const userAgg = await User.aggregate([
+    //   {
+    //     $lookup:{
+    //       from:'accessories',
+    //       localField:'items',
+    //       foreignField:'_id',
+    //       as:'field'
+    //     }
+    //   },
+    // ]);
+
+    const productAccessories = await Accessories.aggregate([
+      {
+        $project: {
+          day: { $dayOfMonth: "$day" },
+          type: 1,
+          adTitle: 1,
+          description: 1,
+          price: 1,
+          images: 1,
+          state: 1,
+          city: 1,
+          neighbourhood: 1,
+          user: 1,
+        },
+      },
+      {
+        $setFields: {
+          $authorObjectId: { $toObjectId: '$_id' },
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userStrId",
+          foreignField: "user",
+          as: "user",
         },
       },
     ]);
@@ -156,11 +200,13 @@ exports.getProductsCar = async (req, res) => {
     }
 
     res.status(200).json({
-      carProducts,
-      productsSale,
-      productRent,
-      productPlots,
-      productOfficeAndShop,
+      // carProducts,
+      // productsSale,
+      // productRent,
+      // productPlots,
+      // productOfficeAndShop,
+      productAccessories,
+      // userAgg
     });
   } catch (err) {
     res.status(500).json({ err });
@@ -227,7 +273,6 @@ exports.getFormData = async (req, res) => {
     console.log(error);
   }
 };
-
 
 //TO SHOW AND UPDATE USER INFORMATION
 exports.getUserData = async (req, res, next) => {
