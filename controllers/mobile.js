@@ -31,7 +31,7 @@ exports.postMobile = async (req, res, next) => {
     // console.log(user, mobilePost);
     res
       .status(201)
-      .json({ message: "Mobile Post Saved Successfully", User: user });
+      .json({ message: "Mobile Post Saved Successfully"});
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;

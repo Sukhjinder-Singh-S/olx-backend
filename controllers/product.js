@@ -136,17 +136,6 @@ exports.getProductsCar = async (req, res) => {
       },
     ]);
 
-    // const userAgg = await User.aggregate([
-    //   {
-    //     $lookup:{
-    //       from:'accessories',
-    //       localField:'items',
-    //       foreignField:'_id',
-    //       as:'field'
-    //     }
-    //   },
-    // ]);
-
     const productAccessories = await Accessories.aggregate([
       {
         $project: {
@@ -163,16 +152,107 @@ exports.getProductsCar = async (req, res) => {
         },
       },
       {
-        $setFields: {
-          $authorObjectId: { $toObjectId: '$_id' },
+        $lookup: {
+          from: "users",
+          let: {
+            customerId: "$user",
+          },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $eq: [
+                    {
+                      $toObjectId: "$_id",
+                    },
+                    "$$customerId",
+                  ],
+                },
+              },
+            },
+          ],
+          as: "user",
         },
       },
+    ]);
+
+    const productMobile = await Mobile.aggregate([
+      {
+        $project: {
+          day: { $dayOfMonth: "$day" },
+          type: 1,
+          adTitle: 1,
+          description: 1,
+          price: 1,
+          images: 1,
+          state: 1,
+          city: 1,
+          neighbourhood: 1,
+          user: 1,
+        },
+      },
+
       {
         $lookup: {
           from: "users",
-          localField: "userStrId",
-          foreignField: "user",
+          let: {
+            customerId: "$user",
+          },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $eq: [
+                    {
+                      $toObjectId: "$_id",
+                    },
+                    "$$customerId",
+                  ],
+                },
+              },
+            },
+          ],
           as: "user",
+        },
+      },
+    ]);
+
+    const productTablets = await Tablets.aggregate([
+      {
+        $lookup: {
+          from: "users",
+          let: {
+            customerId: "$user",
+          },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $eq: [
+                    {
+                      $toObjectId: "$_id",
+                    },
+                    "$$customerId",
+                  ],
+                },
+              },
+            },
+          ],
+          as: "user",
+        },
+      },
+      {
+        $project: {
+          day: { $dayOfMonth: "$day" },
+          type: 1,
+          adTitle: 1,
+          description: 1,
+          price: 1,
+          images: 1,
+          state: 1,
+          city: 1,
+          neighbourhood: 1,
+          user: 1,
         },
       },
     ]);
@@ -182,6 +262,9 @@ exports.getProductsCar = async (req, res) => {
     modify(productRent);
     modify(productPlots);
     modify(productOfficeAndShop);
+    modify(productAccessories);
+    modify(productMobile);
+    modify(productTablets);
 
     function modify(data) {
       data.forEach((object) => {
@@ -200,13 +283,14 @@ exports.getProductsCar = async (req, res) => {
     }
 
     res.status(200).json({
-      // carProducts,
-      // productsSale,
-      // productRent,
-      // productPlots,
-      // productOfficeAndShop,
+      carProducts,
+      productsSale,
+      productRent,
+      productPlots,
+      productOfficeAndShop,
       productAccessories,
-      // userAgg
+      productMobile,
+      productTablets,
     });
   } catch (err) {
     res.status(500).json({ err });
