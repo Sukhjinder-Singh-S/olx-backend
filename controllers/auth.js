@@ -1,4 +1,4 @@
-const User = require("../modules/user");
+const User = require("../model/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { generateOtp, messageOtp } = require("../middleware/mobile-verify");
@@ -14,7 +14,7 @@ exports.signup = async (req, res, next) => {
   try {
     newOtp = generateOtp();
     await messageOtp(phone, newOtp);
-    
+
     const postUser = await user.save();
 
     const token = jwt.sign(
@@ -53,6 +53,8 @@ exports.login = async (req, res, next) => {
     newOtp = generateOtp();
     await messageOtp(mobile, newOtp);
     const user = await User.findOne({ contact: mobile });
+    const userIp = req.ip
+    console.log(userIp);
 
     if (!user) {
       res
@@ -70,6 +72,7 @@ exports.login = async (req, res, next) => {
       Token: token,
       userId: loadUser._id.toString(),
       message: "Please check inbox for otp",
+      userLocation: userIp,
     });
   } catch (error) {
     if (!error.statusCode) {
@@ -78,4 +81,3 @@ exports.login = async (req, res, next) => {
     next(error);
   }
 };
-

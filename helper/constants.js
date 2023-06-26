@@ -1,0 +1,38 @@
+const constant = {};
+
+constant.ERROR_MESSAGE = {
+  ID_NOT_FOUND: "No id found",
+  NO_POST_FOUND: "No post found",
+  NO_USER_FOUND: "No user found",
+  NO_FILE_FOUND: "No file selected to upload",
+  NOT_AUTHENTICATED: "You're not authenticated",
+  NOT_ALLOW_MODICFICATION: "You're not allow to modify this post",
+  NOT_ALLOW_DELETE: "You're not allow to delete this post",
+  WENT_WRONG: '"Something went wrong, Try to login/signup again"',
+};
+
+constant.STATUSCODE = {
+  NOT_FOUND: 404,
+  NOT_AUTHORIZED: 401,
+  NOT_ALLOW: 203,
+  OKEY: 201,
+  NO_CODE: 500,
+  INVALID_DATA: 422,
+  FORBIDDEN: 403,
+};
+
+constant.CATEGORY = {
+  CAR: "6496619924528e21126000f3",
+  FOR_SALE_HOUSE_APARTMENT: "6496616624528e21126000f1",
+  FOR_RENT_HOUSE_APARTMENT: "649661b424528e21126000f5",
+  LANDS_AND_PLOTS: "649661e524528e21126000f7",
+  FOR_RENT_SHOP_OFFICE: "6496622c24528e21126000f9",
+  MOBILE_PHONES: "6496625424528e21126000fb",
+  ACCESSORIES: "6496626824528e21126000fd",
+  TABLETS: "6496627a24528e21126000ff",
+  MEN: "6496628e24528e2112600101",
+  WOMEN: "6496629624528e2112600103",
+  KIDS: "649662a124528e2112600105",
+};
+
+module.exports = constant;

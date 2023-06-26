@@ -14,6 +14,7 @@ module.exports = async (req, res, next) => {
     );
     console.log(verifytoken);
     req.userId = verifytoken.userId;
+    console.log(req.userId)
     req.contact = verifytoken.phone;
     next();
   } catch (error) {

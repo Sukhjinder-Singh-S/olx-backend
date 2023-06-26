@@ -1,0 +1,29 @@
+  enum: ["Mobile", "Tablets"],
+  enum: ["Ipads", "Samsung", "Other Tablets"],
+
+  
+exports.deleteCar = async (req, res, next) => {
+  const postId = req.params._id;
+  if (!postId) {
+    errorMessage(ERROR_MESSAGE.ID_NOT_FOUND, STATUSCODE.NOT_FOUND);
+  }
+  try {
+    const check = await Product.findById(postId);
+    if (req.userId !== check.user.toString()) {
+      errorMessage(ERROR_MESSAGE.NOT_ALLOW_DELETE, STATUSCODE.NOT_ALLOW);
+    }
+    check.images.forEach((obj) => {
+      const extract = obj.path.replace("\\", "/");
+      clearImage(extract);
+    });
+    await Product.findByIdAndDelete(postId);
+    res
+      .status(STATUSCODE.OKEY)
+      .json({ message: `Product deleted successfully` });
+  } catch (error) {
+    if (!error.statusCode) {
+      errorMessage(STATUSCODE.NO_CODE);
+    }
+    next(error);
+  }
+};
