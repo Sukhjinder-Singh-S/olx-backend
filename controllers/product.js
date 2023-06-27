@@ -130,6 +130,7 @@ exports.postProduct = async (req, res) => {
     catRef: CATEGORY.CAR,
     brand: req.body.brand,
     model: req.body.model,
+    variant: req.body.variant,
     year: req.body.year,
     fuel: req.body.fuel,
     transmission: req.body.transmission,
@@ -138,7 +139,7 @@ exports.postProduct = async (req, res) => {
     adTitle: req.body.adTitle,
     description: req.body.description,
     price: req.body.price,
-    imageUrl: req.files,
+    images: req.files,
     state: req.body.state,
     city: req.body.city,
     neighbour: req.body.neighbour,
@@ -220,7 +221,6 @@ exports.postRent = async (req, res, next) => {
     bathrooms: req.body.bathrooms,
     furnishing: req.body.furnishing,
     listedBy: req.body.listedBy,
-    superBuiltupArea: req.body.superBuiltupArea,
     carpetArea: req.body.carpetArea,
     bachelorsAllowed: req.body.bachelorsAllowed,
     maintenance: req.body.maintenance,
@@ -745,7 +745,7 @@ exports.updateAccessories = async (req, res, next) => {
 exports.postTablet = async (req, res, next) => {
   const post = new Product({
     catRef: CATEGORY.TABLETS,
-    types: req.body.types,
+    type: req.body.type,
     adTitle: req.body.adTitle,
     description: req.body.description,
     price: req.body.price,

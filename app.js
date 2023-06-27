@@ -1,8 +1,7 @@
-
+require("dotenv").config();
 const path = require("path");
 const express = require("express");
 const app = express();
-
 const morgan = require("morgan");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
@@ -14,7 +13,7 @@ const Handler = require("./middleware/error-handler");
 const auth = require("./routes/auth");
 const filter = require("./routes/filter");
 
-app.set('trust proxy', true)
+app.set("trust proxy", true);
 app.use("/images", express.static(path.join(__dirname, "uploades")));
 app.use(bodyParser.json());
 app.use(Upload);
@@ -25,11 +24,8 @@ app.use("/auth", auth);
 app.use("/filter", filter);
 app.use(Handler.errorHandler);
 
-const MONGODB_URI =
-  "mongodb+srv://sukhi:Parm0310@cluster0.uvgtkel.mongodb.net/shopOlxNew";
-
 mongoose
-  .connect(MONGODB_URI)
+  .connect(process.env.MONGODB_URI)
   .then((result) => {
     app.listen(5000);
     console.log("connected");

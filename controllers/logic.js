@@ -1,7 +1,8 @@
 const Product = require("../model/products");
+const Fav = require("../model/favourite");
 
 const { ERROR_MESSAGE, STATUSCODE, CATEGORY } = require("../helper/constants");
-const { default: mongoose } = require("mongoose");
+const { default: mongoose, Schema, Mongoose } = require("mongoose");
 
 const errorMessage = (STATUS_CODE, ERROR_MESSAGE) => {
   if (ERROR_MESSAGE) {
@@ -77,3 +78,10 @@ exports.filter = async (req, res, next) => {
   }
 };
 
+exports.like = async (req, res, next) => {
+  try {
+
+  } catch (error) {
+    next(errorMessage(STATUSCODE.NO_CODE));
+  }
+};
