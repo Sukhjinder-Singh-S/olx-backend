@@ -15,8 +15,11 @@ const errorMessage = (STATUS_CODE, ERROR_MESSAGE) => {
   }
 };
 
+let word;
+
 exports.search = async (req, res, next) => {
-  const word = req.body.word;
+  word = req.body.word;
+  let searchLoc = req.body.location;
   try {
     const output = await Product.aggregate([
       {
@@ -24,6 +27,8 @@ exports.search = async (req, res, next) => {
           $or: [
             { adTitle: { $regex: word, $options: "xi" } },
             { description: { $regex: word, $options: "xi" } },
+            { city: { $regex: searchLoc, $options: "xi" } },
+            { neighbour: { $regex: searchLoc, $options: "xi" } },
           ],
         },
       },
@@ -80,7 +85,24 @@ exports.filter = async (req, res, next) => {
 
 exports.like = async (req, res, next) => {
   try {
-
+    const { postId, like } = req.body;
+    console.log(postId, like);
+    if (like === true) {
+      console.log("1");
+      const result = await Fav.create({
+        postId: postId,
+        like: like,
+        userId: req.userId,
+      });
+      res.status(201).json({ result });
+    } else if (like === false) {
+      console.log("2");
+      let remove = await Fav.aggregate([
+        { $match: { postId: new mongoose.Types.ObjectId(postId) } },
+      ]);
+      remove = await Fav.deleteOne(remove.postId);
+      res.status(201).json({ remove });
+    }
   } catch (error) {
     next(errorMessage(STATUSCODE.NO_CODE));
   }

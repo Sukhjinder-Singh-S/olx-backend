@@ -235,7 +235,7 @@ exports.postRent = async (req, res, next) => {
     images: req.files,
     state: req.body.state,
     city: req.body.city,
-    neighbourhood: req.body.neighbourhood,
+    neighbour: req.body.neighbour,
     user: req.userId,
   });
   try {
@@ -274,7 +274,7 @@ exports.updateRent = async (req, res, next) => {
     carParking: req.body.carParking,
     facing: req.body.facing,
     projectName: req.body.projectName,
-    adtitle: req.body.adtitle,
+    adTitle: req.body.adtitle,
     description: req.body.description,
     price: req.body.price,
     images: req.files,
@@ -433,7 +433,7 @@ exports.postPlots = async (req, res, next) => {
     images: req.files,
     state: req.body.state,
     city: req.body.city,
-    neighbourhood: req.body.neighbourhood,
+    neighbour: req.body.neighbour,
     user: req.userId,
   });
   try {
@@ -468,7 +468,7 @@ exports.updatePlot = async (req, res, next) => {
     images: req.files,
     state: req.body.state,
     city: req.body.city,
-    neighbourhood: req.body.neighbourhood,
+    neighbour: req.body.neighbour,
   };
   if (req.files) {
     images = req.files;
@@ -520,14 +520,14 @@ exports.postAdd = async (req, res, next) => {
     images: req.files,
     state: req.body.state,
     city: req.body.city,
-    neighbourhood: req.body.neighbourhood,
+    neighbour: req.body.neighbour,
     user: req.userId,
   });
   try {
     const post = await postProd.save();
     res
       .status(STATUSCODE.OKEY)
-      .json({ message: "Post added successfully", post: post, user: user });
+      .json({ message: "Post added successfully", post: post,});
   } catch (error) {
     if (!error.statusCode) {
       errorMessage(STATUSCODE.NO_CODE);
@@ -556,7 +556,7 @@ exports.UpdateAddShopOffice = async (req, res, next) => {
     images: req.files,
     state: req.body.state,
     city: req.body.city,
-    neighbourhood: req.body.neighbourhood,
+    neighbour: req.body.neighbour,
   };
   if (req.files) {
     images = req.files;
@@ -565,7 +565,7 @@ exports.UpdateAddShopOffice = async (req, res, next) => {
     errorMessage(ERROR_MESSAGE.NO_FILE_FOUND, STATUSCODE.NOT_FOUND);
   }
   try {
-    const check = await Product.findById(postId);
+    const check = await Product.findById(prodId);
     if (check.user.toString() !== req.userId) {
       errorMessage(ERROR_MESSAGE.NOT_ALLOW_MODICFICATION, STATUSCODE.FORBIDDEN);
     }
@@ -599,7 +599,7 @@ exports.postMobile = async (req, res, next) => {
     images: req.files,
     state: req.body.state,
     city: req.body.city,
-    neighbourhood: req.body.neighbourhood,
+    neighbour: req.body.neighbour,
     user: req.userId,
   });
   try {
@@ -628,7 +628,7 @@ exports.updateMobile = async (req, res, next) => {
     images: req.files,
     state: req.body.state,
     city: req.body.city,
-    neighbourhood: req.body.neighbourhood,
+    neighbour: req.body.neighbour,
   };
   if (req.files) {
     images = req.files;
@@ -674,7 +674,7 @@ exports.postAccessories = async (req, res, next) => {
     images: req.files,
     state: req.body.state,
     city: req.body.city,
-    neighbourhood: req.body.neighbourhood,
+    neighbour: req.body.neighbour,
     user: req.userId,
   });
   try {
@@ -703,7 +703,7 @@ exports.updateAccessories = async (req, res, next) => {
     images: req.files,
     state: req.body.state,
     city: req.body.city,
-    neighbourhood: req.body.neighbourhood,
+    neighbour: req.body.neighbour,
   };
 
   if (req.files) {
@@ -752,7 +752,7 @@ exports.postTablet = async (req, res, next) => {
     images: req.files,
     state: req.body.state,
     city: req.body.city,
-    neighbourhood: req.body.neighbourhood,
+    neighbour: req.body.neighbour,
     user: req.userId,
   });
   try {
@@ -782,7 +782,7 @@ exports.updateTablet = async (req, res, next) => {
     images: req.files,
     state: req.body.state,
     city: req.body.city,
-    neighbourhood: req.body.neighbourhood,
+    neighbour: req.body.neighbour,
   };
   if (req.files) {
     images = req.files;
@@ -827,7 +827,7 @@ exports.postMens = async (req, res, next) => {
     images: req.files,
     state: req.body.state,
     city: req.body.city,
-    neighbourhood: req.body.neighbourhood,
+    neighbour: req.body.neighbour,
     user: req.userId,
   });
   try {
@@ -856,7 +856,7 @@ exports.updateMens = async (req, res, next) => {
     images: req.files,
     state: req.body.state,
     city: req.body.city,
-    neighbourhood: req.body.neighbourhood,
+    neighbour: req.body.neighbour,
   };
   if (req.files) {
     images = req.files;
@@ -902,7 +902,7 @@ exports.postWomen = async (req, res, next) => {
     images: req.files,
     state: req.body.state,
     city: req.body.city,
-    neighbourhood: req.body.neighbourhood,
+    neighbour: req.body.neighbour,
     user: req.userId,
   });
   if (!req.files) {
@@ -935,7 +935,7 @@ exports.updateWomen = async (req, res, next) => {
     images: req.files,
     state: req.body.state,
     city: req.body.city,
-    neighbourhood: req.body.neighbourhood,
+    neighbour: req.body.neighbour,
   };
   if (req.files) {
     images = req.files;
@@ -981,7 +981,7 @@ exports.postKid = async (req, res, next) => {
     images: req.files,
     state: req.body.state,
     city: req.body.city,
-    neighbourhood: req.body.neighbourhood,
+    neighbour: req.body.neighbour,
     user: req.userId,
   });
   if (!req.files) {
@@ -1013,7 +1013,7 @@ exports.updateKid = async (req, res, next) => {
     images: req.files,
     state: req.body.state,
     city: req.body.city,
-    neighbourhood: req.body.neighbourhood,
+    neighbour: req.body.neighbour,
   };
   if (req.files) {
     images = req.files;

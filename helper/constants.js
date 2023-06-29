@@ -8,12 +8,13 @@ constant.ERROR_MESSAGE = {
   NOT_AUTHENTICATED: "You're not authenticated",
   NOT_ALLOW_MODICFICATION: "You're not allow to modify this post",
   NOT_ALLOW_DELETE: "You're not allow to delete this post",
-  WENT_WRONG: '"Something went wrong, Try to login/signup again"',
+  WENT_WRONG: "Something went wrong, Try to login/signup again",
+  LOGIN:'Please Login to contine'
 };
 
 constant.STATUSCODE = {
   NOT_FOUND: 404,
-  NOT_AUTHORIZED: 401,
+  NOT_AUTHORIZED: 200,
   NOT_ALLOW: 203,
   OKEY: 201,
   NO_CODE: 500,

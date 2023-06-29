@@ -1,3 +1,4 @@
+require("dotenv").config();
 const User = require("../model/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -18,9 +19,8 @@ exports.signup = async (req, res, next) => {
     const postUser = await user.save();
 
     const token = jwt.sign(
-      { userId: postUser._id.toString(), phone: postUser.contact },
-      "thisIsASecretKey",
-      { expiresIn: "1h" }
+      { userId: postUser._id.toString(), phone: postUser.contact },process.env.SECRET_KEY,
+      { expiresIn: "24h" }
     );
 
     res.status(201).json({
@@ -64,10 +64,11 @@ exports.login = async (req, res, next) => {
     loadUser = user;
 
     const token = jwt.sign(
-      { userId: loadUser._id.toString(), email: loadUser.email },
-      "thisIsASecretKey",
-      { expiresIn: "6h" }
+      { userId: loadUser._id.toString(), email: loadUser.email, status:true },
+      process.env.SECRET_KEY,
+      { expiresIn: "24h" }
     );
+
     res.status(201).json({
       Token: token,
       userId: loadUser._id.toString(),
@@ -81,3 +82,7 @@ exports.login = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.logout = async(req, res, next)=>{
+  
+}

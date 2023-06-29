@@ -12,8 +12,8 @@ const Upload = require("./middleware/multer");
 const Handler = require("./middleware/error-handler");
 const auth = require("./routes/auth");
 const filter = require("./routes/filter");
+const home = require("./routes/get");
 
-app.set("trust proxy", true);
 app.use("/images", express.static(path.join(__dirname, "uploades")));
 app.use(bodyParser.json());
 app.use(Upload);
@@ -22,6 +22,7 @@ app.use(morgan("dev"));
 app.use("/product", productRoute);
 app.use("/auth", auth);
 app.use("/filter", filter);
+app.use("/home", home);
 app.use(Handler.errorHandler);
 
 mongoose

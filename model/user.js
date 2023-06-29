@@ -7,6 +7,7 @@ const userSchema = new Schema({
   name: {type: String,unique: true},
   about: { type: String,},
   contact: {type: Number, minlength: [10], },
+  status:{type:Boolean},
   email: {type: String,validate: [isEmail],lowercase: true, },
   link: { type: String,},
 });
