@@ -17,6 +17,29 @@ const errorMessage = (STATUS_CODE, ERROR_MESSAGE) => {
 
 let word;
 
+exports.getFavourite = async (req, res, next) => {
+  const userId = new mongoose.Types.ObjectId(req.userId);
+  console.log(userId);
+  if (!userId) {
+    errorMessage(ERROR_MESSAGE.ID_NOT_FOUND, STATUSCODE.NOT_FOUND);
+  }
+  try {
+    const findFav = await Fav.aggregate([
+      { $match: { userId: userId } },
+      {
+        $project: {
+          userId: 1,
+          postId: 1,
+          like: 1,
+        },
+      },
+    ]);
+    res.status(STATUSCODE.OKEY).json(findFav);
+  } catch (error) {
+    next(errorMessage(STATUSCODE.NO_CODE));
+  }
+};
+
 exports.search = async (req, res, next) => {
   word = req.body.word;
   let searchLoc = req.body.location;

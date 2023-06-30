@@ -1,6 +1,5 @@
 require("dotenv").config();
 const User = require("../model/user");
-const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { generateOtp, messageOtp } = require("../middleware/mobile-verify");
 

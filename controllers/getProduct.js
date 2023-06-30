@@ -2,6 +2,7 @@
 const { default: mongoose } = require("mongoose");
 const { ERROR_MESSAGE, STATUSCODE, CATEGORY } = require("../helper/constants");
 const products = require("../model/products");
+const Fav = require('../model/favourite')
 
 const errorMessage = (STATUS_CODE, ERROR_MESSAGE) => {
   if (ERROR_MESSAGE) {
@@ -29,6 +30,7 @@ function modify(data) {
   });
   return data;
 }
+
 
 exports.getProducts = async (req, res, next) => {
   try {

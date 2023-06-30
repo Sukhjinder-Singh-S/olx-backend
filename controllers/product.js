@@ -1,6 +1,7 @@
 const User = require("../model/user");
 const Product = require("../model/products");
 const Category = require("../model/category");
+const {validationResult} = require('express-validator')
 
 const path = require("path");
 const fs = require("fs");
@@ -147,6 +148,11 @@ exports.postProduct = async (req, res) => {
     user: req.userId,
   });
   try {
+    const error = validationResult(req)
+    if(!error.isEmpty()){
+      console.log(error.array());
+      return res.status(422).json(error.array())
+    }
     await productCar.save();
     res.status(STATUSCODE.OKEY).json({
       message: "Post saved successfully!",
@@ -239,6 +245,11 @@ exports.postRent = async (req, res, next) => {
     user: req.userId,
   });
   try {
+    const error = validationResult(req)
+    if(!error.isEmpty()){
+      console.log(error.array());
+      return res.status(422).json(error.array())
+    }
     const postRent = await rent.save();
     res.status(STATUSCODE.OKEY).json({
       message: "Post Saved",
@@ -346,6 +357,11 @@ exports.postSale = async (req, res) => {
     user: req.userId,
   });
   try {
+    const error = validationResult(req)
+    if(!error.isEmpty()){
+      console.log(error.array());
+      return res.status(422).json(error.array())
+    }
     const saved = await sale.save();
     res
       .status(STATUSCODE.OKEY)
@@ -437,6 +453,11 @@ exports.postPlots = async (req, res, next) => {
     user: req.userId,
   });
   try {
+    const error = validationResult(req)
+    if(!error.isEmpty()){
+      console.log(error.array());
+      return res.status(422).json(error.array())
+    }
     const onGo = await newPost.save();
     res
       .status(STATUSCODE.OKEY)
@@ -524,6 +545,11 @@ exports.postAdd = async (req, res, next) => {
     user: req.userId,
   });
   try {
+    const error = validationResult(req)
+    if(!error.isEmpty()){
+      console.log(error.array());
+      return res.status(422).json(error.array())
+    }
     const post = await postProd.save();
     res
       .status(STATUSCODE.OKEY)
@@ -603,6 +629,11 @@ exports.postMobile = async (req, res, next) => {
     user: req.userId,
   });
   try {
+    const error = validationResult(req)
+    if(!error.isEmpty()){
+      console.log(error.array());
+      return res.status(422).json(error.array())
+    }
     const mobilePost = await postMobile.save();
     res
       .status(STATUSCODE.OKEY)
@@ -678,6 +709,11 @@ exports.postAccessories = async (req, res, next) => {
     user: req.userId,
   });
   try {
+    const error = validationResult(req)
+    if(!error.isEmpty()){
+      console.log(error.array());
+      return res.status(422).json(error.array())
+    }
     const savePost = await postAd.save();
     res
       .status(STATUSCODE.OKEY)
@@ -756,6 +792,11 @@ exports.postTablet = async (req, res, next) => {
     user: req.userId,
   });
   try {
+    const error = validationResult(req)
+    if(!error.isEmpty()){
+      console.log(error.array());
+      return res.status(422).json(error.array())
+    }
     const savePost = await post.save();
     res.status(STATUSCODE.OKEY).json({
       message: `Post saved successfully for user ${req.userId}`,
@@ -831,6 +872,11 @@ exports.postMens = async (req, res, next) => {
     user: req.userId,
   });
   try {
+    const error = validationResult(req)
+    if(!error.isEmpty()){
+      console.log(error.array());
+      return res.status(422).json(error.array())
+    }
     const post = await postMen.save();
     res.status(STATUSCODE.OKEY).json({
       message: `Post save successfully for user ${req.userId}`,
@@ -909,6 +955,11 @@ exports.postWomen = async (req, res, next) => {
     errorMessage(ERROR_MESSAGE.NO_FILE_FOUND, STATUSCODE.NOT_FOUND);
   }
   try {
+    const error = validationResult(req)
+    if(!error.isEmpty()){
+      console.log(error.array());
+      return res.status(422).json(error.array())
+    }
     const savePost = await postWomen.save();
 
     res.status(STATUSCODE.OKEY).json({
@@ -988,6 +1039,11 @@ exports.postKid = async (req, res, next) => {
     errorMessage(ERROR_MESSAGE.NO_FILE_FOUND, STATUSCODE.NOT_FOUND);
   }
   try {
+    const error = validationResult(req)
+    if(!error.isEmpty()){
+      console.log(error.array());
+      return res.status(422).json(error.array())
+    }
     const createPost = await postKid.save();
     res.status(STATUSCODE.OKEY).json({
       message: `Post saved successfully for user ${req.userId}`,
